@@ -1,8 +1,8 @@
-import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "@/hooks";
 import { fetchComplaints } from "@/features/complaints/complaintsSlice";
+import { useAppDispatch, useAppSelector } from "@/hooks";
 import apiClient from "@/lib/api-client";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -25,11 +25,13 @@ const lifecycle = [
   },
   {
     title: "Wardens manage operations",
-    description: "Review complaints, update mess menu, and track transit entries.",
+    description:
+      "Review complaints, update mess menu, and track transit entries.",
   },
   {
     title: "Admins oversee everything",
-    description: "Monitor all activities across hostels with complete visibility.",
+    description:
+      "Monitor all activities across hostels with complete visibility.",
   },
 ];
 
@@ -54,7 +56,6 @@ function Hero() {
       detail: "Loading...",
     },
   ]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Fetch complaints for live tracking
@@ -65,10 +66,13 @@ function Hero() {
     // Fetch real-time metrics
     const fetchMetrics = async () => {
       try {
-        setLoading(true);
         const [studentsRes, messRes] = await Promise.all([
-          apiClient.get("/user/students/all").catch(() => ({ data: { students: [], count: 0 } })),
-          apiClient.get("/mess/feedback").catch(() => ({ data: { feedbacks: [] } })),
+          apiClient
+            .get("/user/students/all")
+            .catch(() => ({ data: { students: [], count: 0 } })),
+          apiClient
+            .get("/mess/feedback")
+            .catch(() => ({ data: { feedbacks: [] } })),
         ]);
 
         // Calculate resolution rate from complaints
@@ -114,14 +118,14 @@ function Hero() {
             value: avgRating > 0 ? `${avgRating.toFixed(1)}/5` : "N/A",
             detail:
               feedbacks.length > 0
-                ? `Based on ${feedbacks.length} feedback${feedbacks.length !== 1 ? "s" : ""}`
+                ? `Based on ${feedbacks.length} feedback${
+                    feedbacks.length !== 1 ? "s" : ""
+                  }`
                 : "No feedback submitted yet",
           },
         ]);
       } catch (error) {
         console.error("Error fetching metrics:", error);
-      } finally {
-        setLoading(false);
       }
     };
 
